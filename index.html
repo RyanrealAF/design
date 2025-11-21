@@ -2,39 +2,322 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Doctrine of Dark Elegance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #1a1a1a;
-      color: #e0e0e0;
-      line-height: 1.6;
+    :root{
+      --bg:#0d0d0d;
+      --panel:#151515;
+      --panel-2:#1c1c1c;
+      --text:#e8e6e3;
+      --muted:#a7a39a;
+      --charcoal:#2a2a2a;
+      --matte:#0b0b0b;
+      --graphite:#3a3a3a;
+      --deep:#1f1f1f;
+      --bronze:#d4af37;
+      --beige:#c8b79b;
+      --border:#2b2b2b;
+      --glow:0 0 24px rgba(212,175,55,.08), 0 0 6px rgba(212,175,55,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--text)}
+    body{font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif; line-height:1.6}
+
+    /* Header */
+    header{
+      display:grid; place-items:center;
+      padding:2rem 1rem;
+      background:linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%);
+      border-bottom:1px solid var(--border);
+      box-shadow: var(--glow);
+    }
+    header .brand{
+      display:flex; flex-direction:column; align-items:center;
+    }
+    header img{
+      max-height:110px; margin-bottom:.75rem; filter:contrast(1.1) drop-shadow(0 2px 8px rgba(0,0,0,.6));
+      border:2px solid #222; border-radius:8px; background:#000;
+    }
+    header h1{
+      margin:0; font-family:"Playfair Display",serif; font-size:2.2rem; letter-spacing:.01em;
+    }
+    header p{
+      margin:.35rem 0 0; color:var(--muted); font-style:italic;
     }
 
-    header {
-      background-color: #111;
-      padding: 2rem;
-      text-align: center;
-      border-bottom: 1px solid #333;
+    /* Layout */
+    main{max-width:1080px; margin:0 auto; padding:1.25rem}
+    .grid{
+      display:grid; gap:1rem; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
     }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
+    /* Collapsible sections */
+    details.section{
+      background:var(--panel); border:1px solid var(--border);
+      border-left:4px solid var(--graphite); border-radius:10px; overflow:hidden; margin:1rem 0;
+      transition:background .25s ease, border-color .25s ease;
     }
-
-    .tagline {
-      font-style: italic;
-      color: #aaa;
+    details.section[open]{border-left-color:var(--bronze); box-shadow: var(--glow)}
+    summary{
+      list-style:none; cursor:pointer;
+      display:flex; align-items:center; gap:.75rem;
+      padding:.9rem 1rem; background:var(--panel-2);
+      font-weight:700; color:var(--text);
     }
+    summary::-webkit-details-marker{display:none}
+    .caret{
+      width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid var(--text);
+      transition:transform .2s ease;
+    }
+    details[open] .caret{transform:rotate(180deg)}
+    .content{padding:1rem}
 
-    main {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
+    /* Cards */
+    .card{
+      background:#121212; border:1px solid var(--border); border-radius:10px; overflow:hidden;
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card:hover{
+      transform:translateY(-2px);
+      border-color:var(--bronze);
+      box-shadow: var(--glow);
+    }
+    .card img{width:100%; height:160px; object-fit:cover; display:block; background:#000}
+    .card .meta{padding:.75rem}
+    .card .meta h4{margin:0 0 .25rem; font-weight:700}
+    .card .meta p{margin:0; color:var(--muted); font-size:.95rem}
+
+    /* Swatches */
+    .swatch{border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#111}
+    .swatch .block{height:110px}
+    .swatch .info{padding:.6rem .75rem; display:flex; justify-content:space-between; align-items:baseline}
+    .swatch .name{font-weight:700}
+    .swatch .hex{color:var(--muted)}
+
+    /* Typography preview */
+    .type{border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#111}
+    .type .sample{padding:1rem; border-bottom:1px solid var(--border)}
+    .type .sample h1{margin:0; font-size:2rem}
+    .type .sample p{margin:.4rem 0 0; color:var(--beige)}
+    .type .meta{padding:.6rem .75rem; display:flex; justify-content:space-between}
+
+    /* Accents */
+    a, .accent{color:var(--bronze); text-decoration:none}
+    a:hover{filter:brightness(1.15); text-shadow:0 0 8px rgba(212,175,55,.25)}
+    .tag{font-size:.8rem; padding:.25rem .5rem; border:1px solid var(--border); border-radius:999px; color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:520px){
+      header h1{font-size:1.7rem}
+      .card img{height:130px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <!-- Replace with your repo path, e.g., ./images/ryanrealfv.png -->
+      <img src="./images/ryanrealfv.png" alt="RyanrealAF logo" />
+      <h1>Doctrine of Dark Elegance</h1>
+      <p>Tactical Minimalism. Cinematic Intent.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Color palette -->
+    <details class="section" open>
+      <summary><span class="caret"></span> 🖤 Color palette — Monochrome with bronze/beige accents</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="swatch">
+            <div class="block" style="background:var(--charcoal)"></div>
+            <div class="info"><span class="name">Charcoal</span><span class="hex">#2A2A2A</span></div>
+          </div>
+          <div class="swatch">
+            <div class="block" style="background:var(--matte)"></div>
+            <div class="info"><span class="name">Matte Black</span><span class="hex">#0B0B0B</span></div>
+          </div>
+          <div class="swatch">
+            <div class="block" style="background:var(--graphite)"></div>
+            <div class="info"><span class="name">Graphite</span><span class="hex">#3A3A3A</span></div>
+          </div>
+          <div class="swatch">
+            <div class="block" style="background:var(--deep)"></div>
+            <div class="info"><span class="name">Deep Gray</span><span class="hex">#1F1F1F</span></div>
+          </div>
+          <div class="swatch">
+            <div class="block" style="background:var(--bronze)"></div>
+            <div class="info"><span class="name">Metallic Bronze</span><span class="hex">#D4AF37</span></div>
+          </div>
+          <div class="swatch">
+            <div class="block" style="background:var(--beige)"></div>
+            <div class="info"><span class="name">Warm Beige</span><span class="hex">#C8B79B</span></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Typography -->
+    <details class="section">
+      <summary><span class="caret"></span> 🔠 Typography — Bold display, sleek sans body</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="type">
+            <div class="sample" style="font-family:'Playfair Display',serif; letter-spacing:.02em">
+              <h1>Dark Elegance</h1>
+              <p>Cinematic Minimalism</p>
+            </div>
+            <div class="meta"><span>Display — Playfair Display</span><span class="tag">Header</span></div>
+          </div>
+          <div class="type">
+            <div class="sample" style="font-family:'Inter',sans-serif; letter-spacing:.01em">
+              <h1>Operational Clarity</h1>
+              <p>Every element earns its place</p>
+            </div>
+            <div class="meta"><span>Sans — Inter</span><span class="tag">Body</span></div>
+          </div>
+          <div class="type">
+            <div class="sample" style="font-family:'Segoe UI',system-ui,sans-serif">
+              <h1>Tactical Minimalism</h1>
+              <p>Unapologetically bold</p>
+            </div>
+            <div class="meta"><span>Sans — Segoe UI</span><span class="tag">Alt</span></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Lighting -->
+    <details class="section">
+      <summary><span class="caret"></span> 💡 Lighting & contrast — Ambient precision</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Warm LEDs under shelving" />
+            <div class="meta"><h4>Under-shelf LEDs</h4><p>Warm tone, vertical hierarchy</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Recessed ceiling beams" />
+            <div class="meta"><h4>Recessed beams</h4><p>Soft, directional, no glare</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80" alt="Fireplace glow" />
+            <div class="meta"><h4>Fireplace glow</h4><p>Tactical warmth and resonance</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Materials & texture -->
+    <details class="section">
+      <summary><span class="caret"></span> 🧩 Materials & texture — Matte, brushed, embossed</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80" alt="Matte stone wall" />
+            <div class="meta"><h4>Matte stone</h4><p>Textured panels, zero gloss</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80" alt="Brushed metal surface" />
+            <div class="meta"><h4>Brushed metal</h4><p>Embossed and raw surfaces</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1615486363685-9f4b6fb5c75b?auto=format&fit=crop&w=1200&q=80" alt="Graphite surface texture" />
+            <div class="meta"><h4>Graphite finish</h4><p>Tactile resonance, low reflectance</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Furniture loadout -->
+    <details class="section">
+      <summary><span class="caret"></span> 🪑 Furniture — Low-profile, mission-ready</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1615874959474-1b3a3c6f1b3a?auto=format&fit=crop&w=1200&q=80" alt="Dark sectional sofa" />
+            <div class="meta"><h4>Sectional — dark gray</h4><p>Minimal stitching, neutral pillows</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80" alt="Matte black coffee table" />
+            <div class="meta"><h4>Matte table</h4><p>Low-profile, stone finish</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1538683270504-3b8bd3ee1f86?auto=format&fit=crop&w=1200&q=80" alt="Monochrome ergonomic chair" />
+            <div class="meta"><h4>Monochrome chair</h4><p>Ergonomic, built for command</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Spatial strategy -->
+    <details class="section">
+      <summary><span class="caret"></span> 📐 Spatial strategy — Vertical hierarchy + horizontal flow</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1600585154200-3c7f3e0c7f3a?auto=format&fit=crop&w=1200&q=80" alt="Floating shelves" />
+            <div class="meta"><h4>Floating shelves</h4><p>Curated vertical display</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1600585154154-1b3a3c6f1b3a?auto=format&fit=crop&w=1200&q=80" alt="Flush-mounted tech" />
+            <div class="meta"><h4>Flush-mounted tech</h4><p>Screens & fireplaces integrated</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1617093727346-89a83ce5f0b5?auto=format&fit=crop&w=1200&q=80" alt="Open floor flow" />
+            <div class="meta"><h4>Open flow</h4><p>Rugs anchor zones, clear pathways</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Organic contrast -->
+    <details class="section">
+      <summary><span class="caret"></span> 🌿 Organic contrast — Controlled greenery</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1524594154028-9c7b58d2aa04?auto=format&fit=crop&w=1200&q=80" alt="Single sculptural plant" />
+            <div class="meta"><h4>Sculptural plant</h4><p>One or two max, strategic placement</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=80" alt="Stone planter" />
+            <div class="meta"><h4>Stone planter</h4><p>Black, stone, or metallic</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Narrative flow anchored by logo -->
+    <details class="section">
+      <summary><span class="caret"></span> 🧠 Narrative flow — Workspace, lounge, branding</summary>
+      <div class="content">
+        <div class="grid">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Workspace command center" />
+            <div class="meta"><h4>Workspace</h4><p>Command center—tools visible, focused light</p></div>
+          </div>
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80" alt="Cinematic lounge" />
+            <div class="meta"><h4>Living room</h4><p>Cinematic lounge—fire, shadows, silence</p></div>
+          </div>
+          <div class="card">
+            <!-- Use your actual logo asset -->
+            <img src="./images/ryanrealfv.png" alt="RyanrealAF branding logo" />
+            <div class="meta"><h4>Branding</h4><p>Embossed, monochrome, unapologetically bold</p></div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer style="text-align:center; padding:1rem; color:var(--muted); border-top:1px solid var(--border)">
+    © RyanrealAF — Doctrine of Dark Elegance
+  </footer>
+</body>
+</html>      margin: auto;
     }
 
     details {
@@ -287,4 +570,5 @@
   </footer>
 </body>
 </html>
+
 
